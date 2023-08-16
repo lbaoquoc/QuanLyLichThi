@@ -1,0 +1,15 @@
+﻿@using GoogleDriveAPI.Models
+@model List<NhomMonHoc>
+
+
+<option value="">--- Chọn Huyện ---</option>
+
+@if (Model != null)
+{
+    foreach (var nhom in Model)
+    {
+        <option>@nhom.TenNhom</option>
+    }
+}
+
+

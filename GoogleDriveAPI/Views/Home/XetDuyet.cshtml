@@ -1,0 +1,187 @@
+﻿@using GoogleDriveAPI.Models
+@model List<DoiLichThi>
+@{
+    ViewBag.Title = "XetDuyet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+}
+
+<div class="w3l-index-block4 pb-5">
+    <div class="features-bg pb-lg-5 pt-lg-4 py-4">
+       
+            <h3 class="title-big text-center">Xét duyệt yêu cầu</h3>
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>STT</th>
+                        <th>Lý do</th>
+                        <th>Hình ảnh</th>
+                        <th>Mã HP</th>
+                        <th>Tên HP</th>
+                        <th>MSSV</th>
+                        <th>Tên SV</th>
+
+                        <th>Nhóm HP</th>
+                        <th>Ngày tạo</th>
+                        <th>Phòng thi</th>
+                        <th>Thời gian</th>
+                        <th>Hình thức</th>
+
+
+
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.LyDo</td>
+                            <td><img style="width: 150px" src="@Url.Content("~/Content/images/"+@item.HinhAnh)" alt="Alternate Text" /></td>
+                            <td>@item.LichThi.NhomMonHoc.MonHoc.MaMon</td>
+                            <td>@item.LichThi.NhomMonHoc.MonHoc.TenMon</td>
+                            <td>@item.MSND</td>
+                            <td>@item.HoTenSV</td>
+                           
+                            <td>@item.LichThi.NhomMonHoc.TenNhom</td>
+                            <td>@item.NgayTao</td>
+                            @if (item.LichThi.Note != null)
+                            {
+                                <td>@item.LichThi.PhongHoc.TenPhong - @item.LichThi.Note</td>
+                            }
+                            else
+                            {
+                                <td>@item.LichThi.PhongHoc.TenPhong </td>
+                            }
+
+
+                            <td>150p</td>
+                            <td>@item.LichThi.HinhThucThi.TenHT</td>
+                            
+
+                            <td>
+                                <button data-MaLich="@item.ID" class="btn btn-outline-primary getMaLich" data-bs-toggle="modal" data-bs-target="#myModal">Duyệt</button>
+                                <button data-MaLich="@item.ID" class="btn btn-outline-danger tuchoi" data-bs-toggle="modal" data-bs-target="#myModal">Từ chối</button>
+                            </td>
+                            
+
+                        </tr>
+                        i++;
+                    }
+
+                </tbody>
+            </table>
+
+    
+    </div>
+</div>
+<script>
+    $(".getMaLich").click(function () {
+        var id = $(this).attr("data-MaLich");
+        console.log(id);
+
+        Swal.fire({
+            title: 'Duyệt dời lịch thi?',
+            text: "Bạn có chắc chắn?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#40b043',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đồng Ý'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "GET",
+                    url: location.origin + "/Home/DuyetDoiLich?MaDoiLich=" + id,
+                    success: function (data) {
+                        console.log(data)
+
+                        if (data.mess === "success") {
+                            Swal.fire(
+                                {
+                                    icon: 'success',
+                                    title: 'Thành công',
+                                    text: 'Duyệt dời lịch thi thành công!',
+                                }
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.reload()
+                                }
+                            })
+                        }
+                        else {
+                            Swal.fire({
+
+                                icon: 'error',
+                                title: 'Xảy ra lỗi',
+                                text: 'Đã xảy ra lỗi, vui lòng thử lại sau!',
+                                showConfirmButton: true,
+
+                            })
+                        }
+                    },
+
+
+                });
+
+            }
+
+        })
+
+    })
+    $(".tuchoi").click(function () {
+        var id = $(this).attr("data-MaLich");
+        console.log(id);
+
+        Swal.fire({
+            title: 'Từ chối dời lịch thi?',
+            text: "Bạn có chắc chắn?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#40b043',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đồng Ý'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "GET",
+                    url: location.origin + "/Home/TuChoiDoiLich?MaDoiLich=" + id,
+                    success: function (data) {
+                        console.log(data)
+
+                        if (data.mess === "success") {
+                            Swal.fire(
+                                {
+                                    icon: 'success',
+                                    title: 'Thành công',
+                                    text: 'Duyệt dời lịch thi thành công!',
+                                }
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.reload()
+                                }
+                            })
+                        }
+                        else {
+                            Swal.fire({
+
+                                icon: 'error',
+                                title: 'Xảy ra lỗi',
+                                text: 'Đã xảy ra lỗi, vui lòng thử lại sau!',
+                                showConfirmButton: true,
+
+                            })
+                        }
+                    },
+
+
+                });
+
+            }
+
+        })
+
+    })
+</script>
+

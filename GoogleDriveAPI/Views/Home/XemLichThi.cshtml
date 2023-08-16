@@ -1,0 +1,386 @@
+﻿@using GoogleDriveAPI.Models
+@model List<LichThi>
+@{
+    ViewBag.Title = "XemLichThi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    NguoiDung user = ViewBag.user as NguoiDung;
+    int i = 1;
+}
+
+    <!-- The Modal -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Form xin đổi lịch thi</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form id="form-DoiLichThi" action="" method="post">
+                        <div id="append-input" class="mb-3 mt-3">
+                            <label for="email" class="form-label">Họ tên SV:</label>
+                           
+                               
+                           
+                            <input readonly type="email" class="form-control" id="email" value="@user.TenND" name="email">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="email" class="form-label">Email SV:</label>
+                            <input readonly type="email" class="form-control" id="email" value="@user.Email" name="email">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="email" class="form-label">Lý do:</label>
+
+                            <textarea class="form-control" id="LyDo" name="LyDo"></textarea>
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="email" class="form-label">Minh chứng:</label>
+
+                            <input class="form-control" type="file" placeholder="Nhập mô tả..." name="HinhAnh" id="HinhAnh" required>
+
+                            <img id="preview-img" style="width:250px" src="~/Content/images/no-img.jpg" alt="Alternate Text" />
+                        </div>
+                        <button type="submit" class="btn btn-success">Gửi</button>
+                    </form>
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Thoát</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="w3l-index-block4 pb-5">
+        <div class="features-bg pb-lg-5 pt-lg-4 py-4">
+            <div class="container">
+
+
+                @if (user.MaLND == 1)
+                {
+                    <h3 class="title-big text-center">Xem lịch thi @ViewBag.TenKhoa </h3>
+                    <a href="@Url.Action("DangKyLichThi","Home")" style="color: #f50057" data-bs-toggle="tooltip" title="Đăng ký lịch thi" class="btn"> <i class="fa-solid fa-pen-to-square"></i></a>
+                }
+                else
+                {
+                    <h3 class="title-big text-center">Xem lịch thi @ViewBag.TenKhoa </h3>
+                }
+            <div class="d-flex justify-content-between py-2">
+                <div class="filter d-flex flex-wrap">
+                    <div class="filter-item pr-2">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="categoryFilter" data-bs-toggle="dropdown" aria-expanded="false">
+                            Lớp học phần
+                        </button>
+                        <ul class="dropdown-menu">
+                            @foreach (var item in @ViewBag.hocPhan)
+                            {
+                                <li class="filter-hocphan-item"><a class="dropdown-item filter-hocphan" data-hocphan="@item.MaMon" href="#">@item.TenMon</a></li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="filter-item pr-2">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="categoryFilter" data-bs-toggle="dropdown" aria-expanded="false">
+                            Giảng viên
+                        </button>
+                        <ul class="dropdown-menu">
+                            @foreach (var item in @ViewBag.giangVien)
+                            {
+                                <li class="filter-giangvien-item"><a class="dropdown-item filter-giangvien" data-giangvien="@item.MaND"  href="#">@item.TenND</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <a href="@Url.Action("InFileExcel","Home")" class="btn btn-primary">In excel</a>
+                </div>
+                
+            </div>
+                
+
+
+
+                <table class="table" id="itemTable">
+                    <thead class="table-dark">
+                        <tr>
+                            @*<th>STT</th>*@
+                            <th>Mã CB</th>
+                            <th>Họ và tên CB</th>
+                            <th>Mã HP</th>
+                            <th>Số SV</th>
+                            <th>Tên học phần</th>
+                            <th>Số CB coi thi</th>
+                            <th>Nhóm HP</th>
+                            <th>Ngày thi</th>
+                            <th>Phòng thi</th>
+                            <th>Thời gian</th>
+                            <th>Hình thức</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr data-hocphan="@item.NhomMonHoc.MonHoc.MaMon" data-giangvien="@item.NhomMonHoc.NguoiDung.MaND">
+                                @*<td>@i</td>*@
+                                <td>@item.NhomMonHoc.NguoiDung.MSND</td>
+                                <td>@item.NhomMonHoc.NguoiDung.TenND</td>
+                                <td>@item.NhomMonHoc.MonHoc.MaMon</td>
+                                <td>@item.NhomMonHoc.SoLuong</td>
+                                <td>@item.NhomMonHoc.MonHoc.TenMon</td>
+                                <td>@item.SLGV</td>
+                                <td>@item.NhomMonHoc.TenNhom</td>
+                                <td>@item.ThoiGian</td>
+                                @if (item.Note != null)
+                                {
+                                    <td>@item.PhongHoc.TenPhong - @item.Note</td>
+                                }
+                                else
+                                {
+                                    <td>@item.PhongHoc.TenPhong </td>
+                                }
+
+
+                                <td>150p</td>
+                                <td>@item.HinhThucThi.TenHT</td>
+                                @if (item.NhomMonHoc.NguoiDung.MaND == user.MaND && user.MaLND == 1)
+                                {
+                                    <td>
+                                        <a href="@Url.Action("SuaLichThi","Home", new {@MaLich = item.MaLich})" class="btn btn-outline-warning">Sửa</a>
+                                        <button id="test" data-lich="@item.MaLich" type="button" class="btn btn-outline-danger btn-XoaMon">Xóa</button>
+                                    </td>
+                                }
+                                @if (user.MaLND != 1)
+                                {
+
+                                    <td>
+                                        <button data-MaKhoa="@item.MaKhoa" data-EmailGV="@item.NhomMonHoc.NguoiDung.Email" data-MaGV="@item.NhomMonHoc.NguoiDung.MaND" data-MaLich="@item.MaLich" class="btn btn-outline-secondary getMaLich" data-bs-toggle="modal" data-bs-target="#myModal">Xin đổi lịch thi</button>
+
+                                    </td>
+                                }
+                            </tr>
+                            i++;
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+    </div>
+
+    <script>
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+    </script>
+    <script>
+        $(".btn-XoaMon").click(function () {
+            var id = $(this).attr("data-lich");
+            console.log(id);
+
+            Swal.fire({
+                title: 'Xóa lịch thi?',
+                text: "Nếu bạn xóa lịch thi, nếu người khác đăng ký, bạn sẽ không đăng ký được nữa",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#40b043',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Xóa'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "GET",
+                        url: location.origin + "/Home/DeleteLichThi?MaLich=" + id,
+                        success: function (data) {
+                            console.log(data)
+
+                            if (data.mess === "success") {
+                                Swal.fire(
+                                    {
+                                        icon: 'success',
+                                        title: 'Thành công',
+                                        text: 'Xóa lịch thi thành công!',
+                                    }
+                                ).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.reload()
+                                    }
+                                })
+                            }
+                            else {
+                                Swal.fire({
+
+                                    icon: 'error',
+                                    title: 'Xảy ra lỗi',
+                                    text: 'Đã xảy ra lỗi, vui lòng thử lại sau!',
+                                    showConfirmButton: true,
+
+                                })
+                            }
+                        },
+
+
+                    });
+
+                }
+
+            })
+
+        })
+
+        $(".filter-hocphan").click(function () {
+            var selectedHocPhan = $(this).attr("data-hocphan");
+
+            var rows = document.querySelectorAll("#itemTable tbody tr");
+
+            rows.forEach(function (row) {
+                var hocphan = row.getAttribute("data-hocphan");
+
+                if (selectedHocPhan === "all" || selectedHocPhan === hocphan) {
+                    row.style.display = "table-row";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+
+        $(".filter-giangvien").click(function () {
+            var selectedGiangVien = $(this).attr("data-giangvien");
+
+            console.log(selectedGiangVien);
+
+            var rows = document.querySelectorAll("#itemTable tbody tr");
+
+            rows.forEach(function (row) {
+                var giangvien = row.getAttribute("data-giangvien");
+
+                if (selectedGiangVien === "all" || selectedGiangVien === giangvien) {
+                    row.style.display = "table-row";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+
+        //$(".filter-hocphan").click(function () {
+        //    var id = $(this).attr("data-hocphan");
+        //    console.log(id);
+
+        //    $.ajax({
+        //        type: "GET",
+        //        url: location.origin + "/Home/DeleteLichThi?MaLich=" + id,
+        //        success: function (data) {
+        //            console.log(data)
+
+        //            if (data.mess === "success") {
+        //                Swal.fire(
+        //                    {
+        //                        icon: 'success',
+        //                        title: 'Thành công',
+        //                        text: 'Xóa lịch thi thành công!',
+        //                    }
+        //                ).then((result) => {
+        //                    if (result.isConfirmed) {
+        //                        window.location.reload()
+        //                    }
+        //                })
+        //            }
+        //            else {
+        //                Swal.fire({
+
+        //                    icon: 'error',
+        //                    title: 'Xảy ra lỗi',
+        //                    text: 'Đã xảy ra lỗi, vui lòng thử lại sau!',
+        //                    showConfirmButton: true,
+
+        //                })
+        //            }
+        //        },
+        //    });)
+
+        //})
+
+
+
+        //hình 1
+        const reader = new FileReader();
+        const fileInput = document.getElementById("HinhAnh");
+        const img = document.getElementById("preview-img");
+        reader.onload = e => {
+            img.src = e.target.result;
+        }
+        fileInput.addEventListener('change', e => {
+            const f = e.target.files[0];
+            reader.readAsDataURL(f);
+
+
+        })
+        $(".getMaLich").click(function () {
+            var MaLich = $(this).attr("data-MaLich");
+            var MaGV = $(this).attr("data-MaGV");
+            var MaKhoa = $(this).attr("data-MaKhoa");
+            var EmailGV = $(this).attr("data-EmailGV");
+            $("#append-input").append('   <input  type="hidden" class="form-control" id="MaLich" value="' + MaLich + '" name="MaLich"> ' +
+                '   <input  type="hidden" class="form-control" id="MaGV" value="' + MaGV + '" name="MaGV">' +
+
+                '   <input  type="hidden" class="form-control" id="EmailGV" value="' + EmailGV + '" name="EmailGV">' +
+                '    <input type="hidden" class="form-control" id="MaKhoa" value="' + MaKhoa +'" name="email">');
+            $("form#form-DoiLichThi").submit(function () {
+                const MaKhoa = $("#MaKhoa").val();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    type: "POST",
+                    url: '/Home/UploadFiles',
+                    data: formData, // serializes the form's elements.
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+
+                        if (data.mess == "success") {
+
+                            Swal.fire({
+
+                                icon: 'success',
+                                title: 'Thêm thành công',
+                                text: 'Bạn đã thêm mới môn thi thành công',
+                                showConfirmButton: true,
+
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.reload()
+                                }
+                            })
+
+                        }
+                        else {
+                            Swal.fire({
+
+                                icon: 'error',
+                                title: 'Xảy ra lỗi',
+                                text: 'Đã xảy ra lỗi, vui lòng thử lại sau!',
+                                showConfirmButton: true,
+
+                            })
+                        }
+
+                    },
+
+                });
+                return false;
+            });
+        })
+
+
+    </script>

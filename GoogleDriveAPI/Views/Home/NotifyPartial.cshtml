@@ -1,0 +1,80 @@
+﻿@using GoogleDriveAPI.Models
+@model List<ThongBao>
+@{
+    int? countDX = ViewBag.listDaXem;
+}
+<div id="show-noti" class="pull-right toggle-right-sidebar ">
+    <div id="notify">@countDX</div>
+    <span style="background-color: #f50057; opacity: 1" class="fa-solid fa-bell"> </span>
+    <div id="ex4">
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                if (item.NguoiDung.MaLND == 2)
+                {
+                    if (item.DoiLichThi.XetDuyet == 0)
+                    {
+                        <p>Bạn vừa xin đổi lịch thi <b>thành công</b>. Yêu cầu của bạn sẽ được giảng viên xem xét và phe duyệt.</p>
+                    }
+                    if (item.DoiLichThi.XetDuyet == 1)
+                    {
+                        <p>Yêu cầu xin đổi lịch thi của bạn <b>được phê duyệt</b>. Vui lòng cập nhật mail để biết lịch thi mới.</p>
+                    }
+                    if (item.DoiLichThi.XetDuyet == 2)
+                    {
+                        <p>Yêu cầu xin đổi lịch thi của bạn bị từ chối. Vui lòng đến thi đúng lịch ban đầu.</p>
+                    }
+                }
+                if (item.NguoiDung.MaLND == 1)
+                {
+                    if (item.DoiLichThi.XetDuyet == 1)
+                    {
+                      
+                        <p>Bạn vừa xét duyệt đổi lịch thi <b>thành công</b>.</p>
+                    }
+                    if (item.DoiLichThi.XetDuyet == 0)
+                    {
+                     
+                        <p>Bạn có yêu cầu xét duyệt mới.</p>
+                    }
+                    if (item.DoiLichThi.XetDuyet == 2)
+                    {
+                      
+                        <p>Yêu cầu xét duyệt đổi lịch thi đã được bạn từ chối.</p>
+                    }
+                }
+
+
+            }
+        }
+
+    </div>
+
+</div>
+<script>
+        $("#show-noti").click(function () {
+
+            const val = $("#ex4").css("display");
+
+            if (val == "none") {
+                $("#ex4").css("display", "block");
+            }
+            else {
+                $("#ex4").css("display", "none");
+            }
+
+            $.ajax({
+                type: "GET",
+                url: location.origin + "/Home/DaXemTB",
+                success: function (data) {
+                    console.log(data)
+                    $("#notify").empty();
+                    $("#notify").html("0");
+
+                }
+            });
+
+        })
+
+</script>

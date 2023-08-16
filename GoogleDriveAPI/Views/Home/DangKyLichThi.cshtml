@@ -1,0 +1,251 @@
+﻿@using GoogleDriveAPI.Models
+
+@{ 
+    List<NhomMonHoc> listNhom = ViewBag.listNhom as List<NhomMonHoc>;
+    List<PhongHoc> listPhong = ViewBag.listPhong as List<PhongHoc>;
+}
+@{
+    ViewBag.Title = "DangLyLichThi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="w3l-index-block4 pb-5">
+    <div class="features-bg pb-lg-5 pt-lg-4 py-4">
+        <div class="container">
+        </div>
+        <h3 class="title-big text-center">Đăng ký lịch thi GV. Lê Văn Quan</h3>
+        <div class="container mt-3">
+       
+            <form action="/action_page.php">
+                <div class="mb-3 mt-3">
+                    <label for="email">Môn học:</label>
+                    <select id="listMonHoc" class="form-select">
+                        
+
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="pwd">Nhóm:</label>
+                    <select id="listNhom" class="form-select">
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="pwd">Thời gian:</label>
+                    <select id="listTG" class="form-select">
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="pwd">Hình thức thi:</label>
+                    <select id="listHT" class="form-select">
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="pwd">Phòng thi:</label>
+                    <select id="listPhong" class="form-select">
+                        
+                         
+                        
+
+                    </select>
+                </div>
+                <div class="mb-3 mt-3">
+                    <label for="" class="form-label">Số CB coi thi:</label>
+                    <input type="number" class="form-control" id="slCB" placeholder="" name="">
+                </div>
+                <div id="appendHT" class="mb-3 mt-3">
+                    
+                </div>
+               
+                <button style="width: 100%; background-color: #f50057 ; color:white" type="button" id="btn-DKLT" class="btn ">Đăng ký</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+<script>
+    $.ajax({
+        type: "GET",
+        url: location.origin + "/Home/GetListMon",
+        success: function (data) {
+            console.log(data)
+            $("#listMonHoc").empty();
+            var list = data.listNhom;
+            $("#listMonHoc").append(' <option ">-------------</option>');
+            for (var i = 0; i < list.length; i++) {
+                $("#listMonHoc").append(' <option class="MaNhom" value="' + list[i].ID + '">' + list[i].MaMon + ' - ' + list[i].TenMon + '</option>');
+            }
+
+        }
+    });
+    $("#listMonHoc").change(function () {
+        var id = $(this).val();
+        console.log(id)
+
+        $.ajax({
+            type: "POST",
+
+            url: location.origin + "/Home/GetListNhom1?MaMon=" + id,
+            contentType: "html",
+            success: function (response) {
+                console.log(response)
+                //$('#idHuyen').children().remove().end()
+                $("#listNhom").empty();
+
+                var list = response.listNhom;
+                $("#listNhom").append(' <option ">-------------</option>');
+                for (var i = 0; i < list.length; i++) {
+                    $("#listNhom").append(' <option class="MaNhom" value="'+list[i].MaNhom+'">' + list[i].TenNhom+'</option>');
+                }
+                $("#listNhom").change(function () {
+                    var idNhom = $(this).val();
+                    $.ajax({
+                        type: "POST",
+
+                        url: location.origin + "/Home/GetListTime",
+                        contentType: "html",
+                        success: function (response) {
+                            console.log(response)
+                            //$('#idHuyen').children().remove().end()
+                            $("#listTG").empty();
+                            console.log(response.listTG)
+                            var listTG = response.listTG;
+                            var arrTG = listTG.map((e) => {
+                                return e.MaTG;
+                            })
+                            console.log('arrTG', arrTG)
+                            $.ajax({
+                                type: "GET",
+                                url: location.origin + "/Home/GetAllLT",
+                                success: function (data) {
+                                    console.log(data.listLT)
+                                    var listLT = data.listLT;
+                                    var arrTGLT = listLT.map((e) => {
+                                        return e.MaTG;
+                                    })
+                                    console.log('arrTGLT', arrTGLT)
+                                    var dataLocation = arrTG.filter((x) => !arrTGLT.some((y) => y === x));
+                                    console.log('dataLocation', dataLocation)
+                                    var arrList = listTG.filter((x) => dataLocation.some((y) => y === x.MaTG));
+                                    console.log('arrList', arrList)
+                                    $("#listTG").append(' <option ">-------------</option>');
+                                    for (var i = 0; i < arrList.length; i++) {
+                                        let input = arrList[i].ThoiGian1;
+                                        let result = input.replace(/[^0-9]/g, "");
+                                        result = Number(result)
+                                        let date = new Date(result);
+                                        console.log(date)
+                                        $("#listTG").append(' <option class="MaTG" value="' + arrList[i].MaTG + '">' + date + '</option>');
+
+                                    }
+
+                                }
+                            });
+                            
+                            $("#listTG").change(function () {
+                                var idTG = $(this).val();
+                                $.ajax({
+                                    type: "GET",
+                                    url: location.origin + "/Home/GetListHTThi",
+                                    success: function (data) {
+                                        console.log(data)
+                                        $("#listHT").empty();
+                                        var list = data.listHT;
+                                        $("#listHT").append(' <option ">-------------</option>');
+                                        for (var i = 0; i < list.length; i++) {
+                                            $("#listHT").append(' <option class="MaHT" value="' + list[i].MaHT + '">'  + list[i].TenHT + '</option>');
+                                        }
+                                        $("#listHT").change(function () {
+                                            $("#appendHT").empty();
+                                            var idHT = $(this).val();
+                                            if (idHT == 1) {
+                                                $("#appendHT").append('  <label for= "" class= "form-label" > Ghi chú:</label>' +
+                                                    '<input id="note" type="text" class="form-control"  placeholder="" name="">' +
+                                                    '<p>Chú ý: nhập hình thức thi (vd: elcit hoặc elearning)</p> ');
+                                            }
+                                            console.log(idHT)
+                                            $.ajax({
+                                                type: "GET",
+                                                url: location.origin + "/Home/GetAllPhong",
+                                                success: function (data) {
+                                                    console.log(data)
+                                                    var listPhong = data.listPhong;
+                                                    var arrPhong = listPhong.map((e) => {
+                                                        return e.MaPhong;
+                                                    })
+                                                    $.ajax({
+                                                        type: "GET",
+                                                        url: location.origin + "/Home/GetAllLT",
+                                                        success: function (data) {
+                                                            console.log(data.listLT)
+                                                            var listLT = data.listLT;
+                                                            var arrTGLT = listLT.map((e) => {
+                                                                return e.MaPhong;
+                                                            })
+                                                            console.log('arrTGLT', arrTGLT)
+                                                            var dataLocation = arrPhong.filter((x) => !arrTGLT.some((y) => y === x));
+                                                            console.log('dataLocation', dataLocation)
+                                                            var arrList = listPhong.filter((x) => dataLocation.some((y) => y === x.MaPhong));
+                                                            console.log('arrList', arrList)
+                                                            $("#listPhong").empty();
+                                                            var list = data.listNhom;
+                                                            $("#listPhong").append(' <option ">-------------</option>');
+                                                            for (var i = 0; i < arrList.length; i++) {
+                                                                $("#listPhong").append(' <option class="MaPhong" value="' + arrList[i].MaPhong + '">' + arrList[i].TenPhong + '</option>');
+                                                            }
+                                                            $("#listPhong").change(function () {
+                                                                var idPhong = $(this).val();
+                                                                console.log(idPhong)
+                                                                $("#btn-DKLT").click(function () {
+                                                                    var slCB = $("#slCB").val();
+                                                                    var note = $("#note").val();
+                                                                    console.log("FFFF")
+                                                                    $.ajax({
+                                                                        type: "POST",
+                                                                        url: location.origin + "/Home/SubmitDangKy",
+                                                                        data: { MaPhong: idPhong, MaNhom: idNhom, MaTG: idTG, slCB: slCB, Note: note, MaHT: idHT }, // serializes the form's elements.
+                                                                        success: function (data) {
+                                                                            console.log(data)
+                                                                            Swal.fire({
+
+                                                                                icon: 'success',
+                                                                                title: 'Đăng ký thành công',
+                                                                                text: 'Bạn đã đăng ký lịch thi thành công',
+                                                                                showConfirmButton: true,
+
+                                                                            }).then((result) => {
+                                                                                if (result.isConfirmed) {
+                                                                                    window.location.reload()
+                                                                                }
+                                                                            })
+                                                                        }
+                                                                    });
+
+                                                                });
+
+                                                            })
+                                                        }
+                                                    });
+                                                    
+
+                                                }
+                                            });
+                                        })
+                                    }
+                                    
+                                });
+                               
+                            })
+                            
+
+
+                        }
+                    })
+                })
+
+
+            }
+        })
+    })
+</script>
+

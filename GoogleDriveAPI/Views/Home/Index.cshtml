@@ -1,0 +1,217 @@
+﻿@using GoogleDriveAPI.Models
+@model List<Khoa>
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@Html.Action("DangNhapPartial", "Home")
+<!-- banner bottom section -->
+<div class="w3l-index-block4 pb-5">
+    <div class="features-bg pb-lg-5 pt-lg-4 py-4">
+        <div class="container">
+            <div class="title-main text-center mx-auto mb-md-4">
+                <h3 class="title-big">ĐƠN VỊ TRỰC THUỘC</h3>
+                <p class="sub-title mt-2">
+                    Khoa Công nghệ thông tin (CNTT) có tiền thân là Bộ môn Công nghệ Thông tin, được thành lập ngày 16 tháng 9 năm 2013 với 09 giảng viên. Trong số 09 giảng viên này có 04 Tiến sĩ (1 PGS) , 03 Thạc sĩ, và 02 Nghiên cứu sinh đang học ở nước ngoài. Bộ môn Công nghệ thông tin chuyển thành Khoa CNTT theo nghị quyết của Hội đồng Trường Đại học Cần Thơ vào ngày 29/09/2022.
+                </p>
+            </div>
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-4 col-md-6 features15-col-text">
+                        <a style="text-decoration: none" href="courses.html" class="d-flex feature-unit align-items-center title-Khoa" style="min-height:200px">
+                            <div class="col-4">
+                                <div class="features15-info">
+                                    <img class="img-fluid" src="~/Content/images/c2.png" alt=" ">
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="features15-para">
+                                    <h6 style="text-decoration: none">Xem chi tiết</h6>
+                                    <h4 style="text-decoration: none">@item.TenKhoa</h4>
+                                   
+                                </div>
+                            </div>
+                        </a>
+                    </div>}
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //banner bottom section -->
+<div style="margin: 8px auto; display: block; text-align:center;">
+
+    <!---728x90--->
+
+</div>
+<!-- middle section -->
+<section class="w3l-servicesblock py-md-5 py-4">
+    <div class="container pb-2">
+        <div class="row align-items-center">
+            <div class="col-lg-6 left-wthree-img pr-lg-4">
+                <img src="https://www.cit.ctu.edu.vn/images/cit2023/Tongquan_truongcntt.jpg" alt="" class="img-fluid">
+            </div>
+            <div class="col-lg-6 about-right-faq align-self mb-lg-0 mb-5 pl-xl-5">
+                
+                <h3 class="title-big mb-3">TỔNG QUAN VỀ TRƯỜNG CÔNG NGHỆ THÔNG TIN <br>VÀ TRUYỀN THÔNG</h3>
+                <p class="">
+                    Trường Công nghệ thông tin và truyền thông (CNTT-TT) vinh dự là một trong bảy khoa/trường đầu tiên ở Việt Nam, đảm trách đào tạo bậc kỹ sư từ năm 1990. Trải qua 33 năm xây dựng và phát triển, thương hiệu Trường CNTT-TT đã trở thành địa chỉ uy tín cung cấp nguồn nhân lực chất lượng cao cho thị trường lao động trong nước và ngoài nước. Trường có nhiệm vụ đào tạo bậc kỹ sư, thạc sĩ và tiến sĩ chuyên về lĩnh vực CNTT-TT và các lĩnh vực liên quan, góp phần tích cực vào sự phát triển của nền công nghiệp công nghệ thông tin Việt Nam; đồng thời thực hiện nghiên cứu khoa học và chuyển giao công nghệ tiên tiến, góp phần đẩy mạnh nghiệp công nghiệp hóa, hiện đại hóa đất nước.
+                </p>
+                <div class="row mt-lg-5 mt-4 mb-2">
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-center left-insp-art">
+                            <img src="~/Content/images/book.png" alt="" class="img-fluid mr-3">
+                            <h6>Enhance your Skills</h6>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 mt-sm-0 mt-4">
+                        <div class="d-flex align-items-center left-insp-art">
+                            <img src="~/Content/images/book2.png" alt="" class="img-fluid mr-3">
+                            <h6>Start Online Learning</h6>
+                        </div>
+                    </div>
+                </div>
+                <a class="btn button-style button-2 mt-lg-5 mt-4" href="about.html">Read More<i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- //middle section -->
+<div style="margin: 8px auto; display: block; text-align:center;">
+
+    <!---728x90--->
+
+</div>
+<!-- teams 32 block -->
+<section class="w3l-teams-32-main py-5">
+    <div class="teams-32 py-md-4">
+        <div class="container">
+            <div class="title-main text-center mx-auto mb-4">
+                <h3 class="title-big">Văn Phòng Trường</h3>
+                <p class="sub-title mt-2">
+                    Văn phòng Trường là bộ phận tham mưu, giúp việc cho lãnh đạo đơn vị trong việc tổ chức và quản lý mọi mặt công tác hành chính, tổ chức cán bộ, sinh viên, tài chính, tài sản, vật tư, thiết bị, đào tạo, nghiên cứu khoa học và hợp tác quốc tế của đơn vị.
+                </p>
+            </div>
+            <div class="row main-contteam-32 mt-sm-5 pt-lg-2">
+                <div class="col-lg-3 col-6 team-main-19">
+                    <div class="column-19">
+                        <a href="#team"><img class="img-fluid" src="https://www.cit.ctu.edu.vn/images/cit2023/anh_dai_dien/Van_phong/NTTChung.jpg" alt=" "></a>
+                    </div>
+                    <div class="right-team-9">
+                        <h6><a href="#team" class="title-team-32">Ths. CVC. Nguyễn Thị Thủy Chung</a></h6>
+                        <p class="sm-text-32">Công tác đào tạo, đảm bảo chất lượng, hợp tác quốc tế</p>
+                        <p class="sm-text-32">nttchung@ctu.edu.vn</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6 team-main-19">
+                    <div class="column-19">
+                        <a href="#team"><img class="img-fluid" src="https://www.cit.ctu.edu.vn/images/cit2023/anh_dai_dien/Van_phong/DLMChi.jpg" alt=" "></a>
+                    </div>
+                    <div class="right-team-9">
+                        <h6><a href="#team" class="title-team-32">Ths. CVC. Đinh Lâm Mai Chi</a></h6>
+                        <p class="sm-text-32">Quản lý tài chánh, quản lý dự án, quản lý công văn</p>
+                        <p class="sm-text-32">dlmchi@ctu.edu.vn</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6 team-main-19">
+                    <div class="column-19">
+                        <a href="#team"><img class="img-fluid" src="https://www.cit.ctu.edu.vn/images/cit2023/anh_dai_dien/Van_phong/NTTuan.jpg" alt=" "></a>
+                    </div>
+                    <div class="right-team-9">
+                        <h6><a href="#team" class="title-team-32">KS.Nguyễn Thành Tuấn</a></h6>
+                        <p class="sm-text-32">Công tác thiết bị, giao nhận công văn</p>
+                        <p class="sm-text-32">nttuan@cit.ctu.edu.vn</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6 team-main-19">
+                    <div class="column-19">
+                        <a href="#team"><img class="img-fluid" src="https://www.cit.ctu.edu.vn/images/cit2023/anh_dai_dien/Van_phong/LTHTran.jpg" alt=" "></a>
+                    </div>
+                    <div class="right-team-9">
+                        <h6><a href="#team" class="title-team-32">KS. Lương Thị Huyền Trân</a></h6>
+                        <p class="sm-text-32">Công tác sinh viên, Website</p>
+                        <p class="sm-text-32">lthtran@ctu.edu.vn</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- //teams 32 block -->
+<!-- testimonials -->
+
+<!--//testimonials-->
+<!-- blog section -->
+<div class="w3l-grids-block-5 py-5">
+    <section id="grids5-block" class="pt-md-4 pb-md-5 py-4 mb-5">
+        <div class="container">
+            <div class="title-main text-center mx-auto mb-4">
+                <h3 class="title-big">Tin Giáo Vụ</h3>
+               
+            </div>
+            <div class="row mt-sm-5 pt-lg-2">
+                <div class="col-lg-4 col-sm-6">
+                    <div class=" grids5-info">
+                        <a href="blog-single.html"><img src="https://www.cit.ctu.edu.vn/images/cit2023/Totnghiep2023/lam_le_2.jpg" alt=""></a>
+                        <div class="blog-info">
+                            <h5>October 3, 2019</h5>
+                            <h4><a href="blog-single.html">Thông báo lễ trao bằng tốt nghiệp đại học chính quy đợt tháng 04/2023</a></h4>
+                            <p>
+                                Thực hiện theo kế hoạch chung của Trường ĐHCT, lễ trao bằng tốt nghiệp của Trường CNTT-TT sẽ tổ chức vào chiều ngày 14/04/2023 (thứ Sáu).
+
+                                Sinh viên tốt nghiệp làm theo hướng dẫn sau đây:
+
+                                - Sơ đồ chỗ ngồi dự lễ trao bằng tốt nghiệp
+
+                                - Đăng ký mượn lễ phục tốt nghiệp
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mt-sm-0 mt-4">
+                    <div class=" grids5-info">
+                        <a href="blog-single.html"><img src="https://www.cit.ctu.edu.vn/images/anh_dai_dien/doc.png" alt=""></a>
+                        <div class="blog-info">
+                            <h5>October 6, 2019</h5>
+                            <h4><a href="blog-single.html">Lịch Bảo vệ Luận văn tốt nghiệp Học kỳ 2, Năm học 2022-2023</a></h4>
+                            <p>
+                                - Khoa Công nghệ Phần mềm
+
+                                - Khoa Công nghệ Thông tin
+
+                                - Khoa Hệ thống Thông tin
+
+                                - Khoa Khoc học Máy tính
+
+                                - Khoa Mạng máy tính và Truyền thông
+
+                                - Khoa Truyền thông Đa phương tiện
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6  mt-lg-0 mt-4">
+                    <div class=" grids5-info">
+                        <a href="blog-single.html"><img src="https://www.cit.ctu.edu.vn/images/anh_dai_dien/doc.png" alt=""></a>
+                        <div class="blog-info">
+                            <h5>October 7, 2019</h5>
+                            <h4><a href="blog-single.html">Đăng ký dự lễ tốt nghiệp đợt 14/04/2023</a></h4>
+                            <p>
+                                Thực hiện theo kế hoạch chung của Trường ĐHCT, lễ tốt nghiệp của Trường CNTT-TT sẽ tổ chức vào ngày chiều ngày 14/04/2023 (thứ Sáu).
+
+                                Thân mời các em sinh viên đăng ký dự lễ tốt nghiệp <a href="#">tại đây</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- //blog section -->
+<!-- footer -->
+
+

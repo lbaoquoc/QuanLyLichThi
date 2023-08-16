@@ -1,0 +1,237 @@
+﻿@using GoogleDriveAPI.Models
+@model LichThi
+@{
+    ViewBag.Title = "SuaLichThi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="w3l-index-block4 pb-5">
+    <div class="features-bg pb-lg-5 pt-lg-4 py-4">
+        <div class="container">
+        </div>
+        <h3 class="title-big text-center">Sửa lịch thi</h3>
+
+        <div class="container mt-3">
+
+            <form action="/action_page.php">
+                <div class="mb-3 mt-3">
+                    <label for="email">Môn học:</label>
+                    <select disabled id="listMonHoc" class="form-select listMonHoc">
+                        <option>@Model.NhomMonHoc.MonHoc.MaMon - @Model.NhomMonHoc.MonHoc.TenMon</option>
+
+
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="pwd">Nhóm:</label>
+                    <select disabled id="listNhom" class="form-select">
+                        <option>@Model.NhomMonHoc.TenNhom</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="pwd">Hình thức thi:</label>
+                    <select disabled id="listHT" class="form-select">
+                        <option>@Model.HinhThucThi.TenHT</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="pwd">Thời gian:</label>
+                    <input type="hidden" name="name" id="checkMaTime" value="@Model.MaTG" />
+                    <input type="hidden" name="name" id="checkTime" value="@Model.ThoiGian" />
+                    <select id="listTG" class="form-select">
+                        <option>@Model.ThoiGian</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="pwd">Phòng thi:</label>
+                    <input type="hidden" name="name" id="checkMaPhong" value="@Model.MaPhong" />
+                    <input type="hidden" name="name" id="checkPhong" value="@Model.PhongHoc.TenPhong" />
+                    <select id="listPhong" class="form-select">
+                        <option>@Model.PhongHoc.TenPhong</option>
+                    </select>
+                </div>
+                <div class="mb-3 mt-3">
+                    <label for="" class="form-label">Số CB coi thi:</label>
+                    <input type="number" class="form-control" id="slCB" placeholder="" value="@Model.SLGV" name="">
+                </div>
+                <div class="mb-3 mt-3">
+                 
+                    <input type="hidden" class="form-control" id="MaLich" placeholder="" value="@Model.MaLich" name="">
+                </div>
+                @if (Model.MaHT == 1)
+                {
+                    <div id="appendHT" class="mb-3 mt-3">
+                        <label for="" class="form-label"> Ghi chú:</label>
+                        <input id="note" type="text" class="form-control" value="@Model.Note" placeholder="" name="">
+                        <p>Chú ý: nhập hình thức thi (vd: elcit hoặc elearning)</p>
+                    </div>
+                }
+
+                <button style="width: 100%; background-color: #f50057 ; color:white" type="button" id="btn-DKLT" class="btn ">Sửa</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    
+  
+    $("#listMonHoc").click(function () {
+        var value = $("#listMonHoc").val();
+        console.log(value)
+        if (value == "CT472 - Niên luận ngành") {
+            $.ajax({
+                type: "GET",
+                url: location.origin + "/Home/GetListMon",
+                success: function (data) {
+                    console.log(data)
+                    $("#listMonHoc").empty();
+                    var list = data.listNhom;
+                    $("#listMonHoc").append(' <option ">-------------</option>');
+                    for (var i = 0; i < list.length; i++) {
+                        $("#listMonHoc").append(' <option class="MaNhom" value="' + list[i].ID + '">' + list[i].MaMon + ' - ' + list[i].TenMon + '</option>');
+                    }
+
+                }
+            });
+        }
+        
+    })
+    $("#listTG").click(function () {
+        var idNhom = $("#listTG").val();
+        console.log(idNhom)
+        if (idNhom == $("#checkTime").val()) {
+            $.ajax({
+                type: "POST",
+
+                url: location.origin + "/Home/GetListTime",
+                contentType: "html",
+                success: function (response) {
+                    console.log(response)
+                    //$('#idHuyen').children().remove().end()
+                    $("#listTG").empty();
+                    console.log(response.listTG)
+                    var listTG = response.listTG;
+                    var arrTG = listTG.map((e) => {
+                        return e.MaTG;
+                    })
+                    console.log('arrTG', arrTG)
+                    $.ajax({
+                        type: "GET",
+                        url: location.origin + "/Home/GetAllLT",
+                        success: function (data) {
+                            console.log(data.listLT)
+                            var listLT = data.listLT;
+                            var arrTGLT = listLT.map((e) => {
+                                return e.MaTG;
+                            })
+                            console.log('arrTGLT', arrTGLT)
+                            var dataLocation = arrTG.filter((x) => !arrTGLT.some((y) => y === x));
+                            console.log('dataLocation', dataLocation)
+                            var arrList = listTG.filter((x) => dataLocation.some((y) => y === x.MaTG));
+                            console.log('arrList', arrList)
+                            $("#listTG").append(' <option ">-------------</option>');
+                            for (var i = 0; i < arrList.length; i++) {
+                                let input = arrList[i].ThoiGian1;
+                                let result = input.replace(/[^0-9]/g, "");
+                                result = Number(result)
+                                let date = new Date(result);
+                                let hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+                                let minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+                                const formatDate = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear() + ' ' + hour + ':' + minute;
+                                console.log(formatDate)
+                                $("#listTG").append(' <option class="MaTG" value="' + arrList[i].MaTG + '">' + formatDate + '</option>');
+
+                            }
+
+                        }
+                    });
+
+                   
+                     
+                }
+            })
+        }
+       
+    })
+    $("#listPhong").click(function () {
+    var idTG = $(this).val();
+        console.log("idTG", idTG)
+        if (idTG == $("#checkPhong").val()) {
+            $.ajax({
+                type: "GET",
+                url: location.origin + "/Home/GetAllPhong",
+                success: function (data) {
+                    console.log(data)
+                    var listPhong = data.listPhong;
+                    var arrPhong = listPhong.map((e) => {
+                        return e.MaPhong;
+                    })
+                    $.ajax({
+                        type: "GET",
+                        url: location.origin + "/Home/GetAllLT",
+                        success: function (data) {
+                            console.log(data.listLT)
+                            var listLT = data.listLT;
+                            var arrTGLT = listLT.map((e) => {
+                                return e.MaPhong;
+                            })
+                            console.log('arrTGLT', arrTGLT)
+                            var dataLocation = arrPhong.filter((x) => !arrTGLT.some((y) => y === x));
+                            console.log('dataLocation', dataLocation)
+                            var arrList = listPhong.filter((x) => dataLocation.some((y) => y === x.MaPhong));
+                            console.log('arrList', arrList)
+                            $("#listPhong").empty();
+                            var list = data.listNhom;
+                            $("#listPhong").append(' <option ">-------------</option>');
+                            for (var i = 0; i < arrList.length; i++) {
+                                $("#listPhong").append(' <option class="MaPhong" value="' + arrList[i].MaPhong + '">' + arrList[i].TenPhong + '</option>');
+                            }
+
+                        }
+                    });
+
+
+                }
+            });
+        }
+   
+        
+
+    });
+   
+    $("#btn-DKLT").click(function () {
+        var checkMaTime = $("#checkMaTime").val();
+        var checkMaPhong = $("#checkMaPhong").val();
+        var idTG = ($("#listTG").val()).length > 1 ? checkMaTime : $("#listTG").val();
+        var idPhong = ($("#listPhong").val()).length > 1 ? checkMaPhong : $("#listPhong").val();
+        var idHT = $("#listHT").val();
+       
+        var idNhom = $("#listNhom").val();
+        var slCB = $("#slCB").val();
+        var note = $("#note").val();
+        var MaLich = $("#MaLich").val();
+        console.log( idTG, idPhong,  slCB, note, MaLich)
+        $.ajax({
+            type: "POST",
+            url: location.origin + "/Home/SubmitSuaLich",
+            data: { MaLich: MaLich, MaPhong: idPhong,  MaTG: idTG, slCB: slCB, Note: note }, // serializes the form's elements.
+            success: function (data) {
+                console.log(data)
+                Swal.fire({
+
+                    icon: 'success',
+                    title: 'Sửa thành công',
+                    text: 'Bạn đã sửa lịch thi thành công',
+                    showConfirmButton: true,
+
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload()
+                    }
+                })
+            }
+        });
+
+    });
+</script>
